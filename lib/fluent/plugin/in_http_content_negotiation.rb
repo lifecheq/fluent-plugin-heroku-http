@@ -54,10 +54,6 @@ module Fluent
         content_type = params['HTTP_CONTENT_TYPE']
         payload = params['_event_record']
         tyme, records = @parser.parse(content_type, payload) { |tyme, records| return tyme, records }
-        # HACK: We are receiving JSON objects like this:
-        # {"logs": [{"log_field": "abcd"}]}
-        # So we need to pick out the 'logs' field
-        records = records['logs'] if content_type == 'application/json'
         [tyme, records]
       end
     end
