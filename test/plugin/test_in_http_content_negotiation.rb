@@ -57,8 +57,8 @@ class HttpContentNegotiationInputTest < Test::Unit::TestCase
     time_parser = Fluent::TimeParser.new
 
     tests = [
-      '59 <13>1 2014-01-29T06:25:52.589365+00:00 host app web.1 - foo',
-      '59 <13>1 2014-01-30T07:35:00.123456+09:00 host app web.1 - bar'
+      '59 <13>1 2014-01-29T06:25:52.589365+00:00 host app some-web.1 - foo',
+      '59 <13>1 2014-01-30T07:35:00.123456+09:00 host app some-web.1 - bar'
     ]
 
     d.run(expect_records: 2) do
@@ -69,7 +69,7 @@ class HttpContentNegotiationInputTest < Test::Unit::TestCase
     assert_equal ['heroku', time_parser.parse('2014-01-29T06:25:52.589365+00:00'), {
       'drain_id' => 'host',
       'ident' => 'app',
-      'pid' => 'web.1',
+      'pid' => 'some-web.1',
       'message' => 'foo',
       'facility' => 'user',
       'loglevel' => 'notice'
@@ -78,7 +78,7 @@ class HttpContentNegotiationInputTest < Test::Unit::TestCase
     assert_equal ['heroku', time_parser.parse('2014-01-30T07:35:00.123456+09:00'), {
       'drain_id' => 'host',
       'ident' => 'app',
-      'pid' => 'web.1',
+      'pid' => 'some-web.1',
       'message' => 'bar',
       'facility' => 'user',
       'loglevel' => 'notice'
@@ -90,8 +90,8 @@ class HttpContentNegotiationInputTest < Test::Unit::TestCase
     time_parser = Fluent::TimeParser.new
 
     tests = [
-      "156 <13>1 2014-01-01T01:23:45.123456+00:00 host app web.1 - #{'x' * 100}",
-      "1080 <13>1 2014-01-01T01:23:45.123456+00:00 host app web.1 - #{'x' * 1024}"
+      "156 <13>1 2014-01-01T01:23:45.123456+00:00 host app some-web.1 - #{'x' * 100}",
+      "1080 <13>1 2014-01-01T01:23:45.123456+00:00 host app some-web.1 - #{'x' * 1024}"
     ]
 
     d.run(expect_records: 2) do
@@ -102,7 +102,7 @@ class HttpContentNegotiationInputTest < Test::Unit::TestCase
     assert_equal ['heroku', time_parser.parse('2014-01-01T01:23:45.123456+00:00'), {
       'drain_id' => 'host',
       'ident' => 'app',
-      'pid' => 'web.1',
+      'pid' => 'some-web.1',
       'message' => 'x' * 100,
       'facility' => 'user',
       'loglevel' => 'notice'
@@ -111,7 +111,7 @@ class HttpContentNegotiationInputTest < Test::Unit::TestCase
     assert_equal ['heroku', time_parser.parse('2014-01-01T01:23:45.123456+00:00'), {
       'drain_id' => 'host',
       'ident' => 'app',
-      'pid' => 'web.1',
+      'pid' => 'some-web.1',
       'message' => 'x' * 1024,
       'facility' => 'user',
       'loglevel' => 'notice'
