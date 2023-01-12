@@ -9,7 +9,7 @@ module Fluent
       # Parses syslog-formatted messages[1], framed using syslog TCP protocol octet counting framing method[2]
       # [1] https://tools.ietf.org/html/rfc5424#section-6
       # [2] https://tools.ietf.org/html/rfc6587#section-3.4.1
-      HTTPS_REGEXP = %r{^([0-9]+)\s+<(?<pri>[0-9]+)>[0-9]* (?<time>[^ ]*) (?<drain_id>[^ ]*) (?<ident>[a-zA-Z0-9_/.\-]*) (?<pid>[a-zA-Z0-9.]+)? *- *(?<message>.*)$}
+      HTTPS_REGEXP = %r{^([0-9]+)\s+<(?<pri>[0-9]+)>[0-9]* (?<time>[^ ]*) (?<drain_id>[^ ]*) (?<ident>[a-zA-Z0-9_/.\-]*) (?<pid>[a-zA-Z0-9.\-]+)? *- *(?<message>.*)$}
       DYNATRACE_FIELDS_REGEXP = /(?=.*dt.entity.host: (?<dt.entity.host>[^ ^,]+))(?=.*dt.entity.process_group_instance: (?<dt.entity.process_group_instance>[^ ^,]+))(?=.*dt.trace_id: (?<trace_id>[^ ^,]+))(?=.*dt.span_id: (?<span_id>[^ ^,]+))/
       DYNATRACE_META_SECTION = /.*(dt.entity.host|dt.entity.process_group_instance|dt.trace_sampled|dt.trace_id|dt.span_id): ([^ ]+)( - )?/
       LOGLEVEL_REGEXP = /(?<level>INFO|WARN|ERROR|FATAL)/
@@ -38,6 +38,8 @@ module Fluent
 
       def parse_syslog(line)
         m = line.match(HTTPS_REGEXP)
+
+        # puts ("raw syslog line: #{m}")
 
         record = m.names.each_with_object({}) do |name, rec|
           rec[name] = m[name]

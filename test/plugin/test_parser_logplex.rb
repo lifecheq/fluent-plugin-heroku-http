@@ -20,14 +20,14 @@ class ParserLogplexTest < Test::Unit::TestCase
   sub_test_case 'plugin will parse syslog format' do
     test 'record has a field' do
       d = create_driver(CONFIG)
-      text = '59 <13>1 2022-01-26T06:25:52.589365+00:00 host app web.1 - foo'
+      text = '59 <13>1 2022-01-26T06:25:52.589365+00:00 host app some-web.1 - foo'
       expected_records = [{
         'drain_id' => 'host',
         'facility' => 'user',
         'ident' => 'app',
         'loglevel' => 'notice',
         'message' => 'foo',
-        'pid' => 'web.1',
+        'pid' => 'some-web.1',
         'time' => '2022-01-26T06:25:52.589365+00:00'
       }]
       d.instance.parse(text) do |_time, records|
